@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale-1"/>
+    <title>
+        Carte de la France
+    </title>
+    <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+    <script src="lib/leaflet/leaflet.js"></script>
+    <script src="data/departements.geojson"></script>
+    <style type="text/css">
+        #map {height : 800px;}
+    </style>
+</head>
+<body>
+    <h4>Carte</h4>
+	<label for="cte">Importer fichier:</label>
+
+<input type="file"
+       id="cte" name="cte">
+    <div id="map"></div>
+    <script>
+
+        function getDepartColor(code) {
+            if (code%2 == 0) {
+                return 'red'
+            }
+            else {
+                return 'green';
+            }
+        }
+
+        function departStyle(feature) {
+            return {
+                fillColor: getDepartColor(feature.properties.code),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: 3,
+                fillOpacity: 0.7
+            }
+        }
+        let mapBoxAccessToken = 'pk.eyJ1Ijoic3JrOTgiLCJhIjoiY2thamxhYTNxMGJzbDJ6anVvdWhjdXB4byJ9.mW_cdgZk9-a69sMwzi75Vw';
+        var map = L.map('map').setView([46.4547, 2.2529], 13);
+
+
+		
+        var departLayer = L.geoJson(
+            departements,
+            { style: departStyle }
+        ).addTo(map);
+        map.fitBounds(departLayer.getBounds());
+
+        var legend = L.control({ position: 'bottomright' });
+        legend.onAdd = function (map) {
+            var div = L.DomUtil.create('div', 'legend');
+            var labels = ["Entre 0 et 15", "Plus que 15"];
+            var grades = [16, 50];
+            div.innerHTML = '<div><b>Legend</b><div>';
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML += '<i style="background:'
+                    + getDepartColor(grades[i]) + '">&nbsp;&nbsp;</i>&nbsp;&nbsp;'
+                    + labels[i] + '<br />';
+            }
+            return div;
+
+        }.addTo(map);
+		L.tileLayer('https://api.mapbox.com/styles/v1/%7Bid%7D/tiles/%7Bz%7D/%7Bx%7D/%7By%7D?access_token=%7BaccessToken%7D', {
+			minZoom: 6,
+			maxZoom: 9,
+			id: 'mapbox/streets-v11',
+			tileSize: 512,
+			zoomOffset: -1,
+			accessToken: mapBoxAccessToken
+		}).addTo(map);
+    </script>
+</body>
+</html>

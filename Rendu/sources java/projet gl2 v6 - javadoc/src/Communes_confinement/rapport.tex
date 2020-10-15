@@ -1,0 +1,235 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Rapport Analyse numérique - Autour de la SVD}
+\author{Saraj Afaf, Rida Adam}
+\date{17 mai 2020}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\documentclass[11pt]{report}
+\usepackage[french]{babel}
+\usepackage{luatextra}
+\usepackage[a4paper]{geometry}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\usepackage[pdfborder=0]{hyperref}
+\usepackage{hhline} 
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+
+
+\begin{document}
+
+\maketitle
+\newpage
+\section{Problème des moindres carrés pour déterminer la méthode de calcul de points du top14 en Rugby}
+
+On cherche à résoudre le système suivant $$ Ax = B$$ Avec 
+$$ A = \left( \begin{matrix} 17 & 13 & 1 & 3 & 7 & 475 & 317& 158\\
+                            17 & 12 & 0 & 5 & 5 & 463 & 304 & 159\\ 
+                            17 & 9 & 1 & 7 & 8 & 451 & 326  & 125\\ 
+                            17 & 9 & 2 & 6 & 5 & 396 & 334  & 626\\ 
+                            17 & 9 & 0 & 8 & 6 & 370 & 377  & -7\\ 
+                            17 & 10 & 0 & 7 & 1 & 423 & 415 & 8\\ 
+                            17 & 8 & 1 & 8 & 6 & 368 & 331  & 37\\ 
+                            17 & 6 & 3 & 8 & 7 & 404 & 390  & 14\\
+                            17 & 7 & 1 & 9 & 3 & 327 & 409  & -82\\
+                            17 & 7 & 0 & 10 & 5 & 392 & 460 & -68\\
+                            17 & 7 & 1 & 9 & 3 & 364 & 439  & -75\\
+                            17 & 6 & 0 & 11 & 4 & 334 & 414 & -80\\
+                            17 & 5 & 1 & 11 & 4 & 323 & 414 & -91\\
+                            17 & 5 & 1 & 11 & 3 & 328 & 488 & -161\end{matrix} \right) 
+; x = \left(\begin{matrix} x_1 \\ x_2 \\ x_3 \\x_4 \\x_5 \\x_6\\ x_7 \\ x_8\end{matrix}\right)
+; b = \left(\begin{matrix} 62 \\
+53 \\
+46 \\
+45 \\
+42 \\
+41 \\
+40 \\
+37 \\
+33\\
+33\\
+33\\
+28\\
+26\\
+25\end{matrix}\right)$$
+\\\\
+Il y a beacoup plus d'équations que d'inconues donc généralement, ce type de problème n'admet pas de solutions. On a $$rg(A) = 8$$
+
+Il s'agit d'un système surdeterminé ($m > n$), on peut donc le transformer en problème des moindres carrés.
+
+$\\$
+
+Soit $J(x) = \frac{1}{2}\begin{Vmatrix}Ax-b\end{Vmatrix}^2$
+Ou $b \in\mathbb{R}^n, et A \in \mathcal{M}_{np}(\mathbb{R})$ avec $n > p$ et $\begin{Vmatrix}.\end{Vmatrix}$ désgine la norme 2.
+
+$\\$
+
+On cherche le gradient de $J$ en fonction de $A$ et $b$
+$$\frac{\partial (\frac{1}{2}\begin{Vmatrix}Ax-b\end{Vmatrix}^2)}{\partial x} = A^{T}(Ax-b) = A^{T}Ax-A^{T}b$$
+
+On veut minimiser $J(x)$, on cherche donc x tel que 
+$$\frac{\partial (\frac{1}{2}\begin{Vmatrix}Ax-b\end{Vmatrix}^2)}{\partial x} = 0\\$$
+$$\Rightarrow A^{T}Ax-A^{T}b = 0 \Rightarrow A^{T}Ax = A^{T}b$$
+La solution est donc $$x = (A^{T}A^{-1})A^{T}b\\\\$$
+
+Déterminons la matrice pseudo-inverse de $A$, la formule est la suivante : 
+$$ A^{+}=(A^{T}A)^{-1}A^{T}  $$
+
+On obtient donc $$x = A^{+}b\\\\$$
+
+Après une implémentation sur Scilab on obtient la matrice suivante pour x 
+\begin{center}
+    \includegraphics[]{Capture.PNG}
+\end{center}
+
+On peut voir que les trois dernières lignes sont peu signifiante par rapport aux autres composantes. De plus la première colonne est identique pour toutes les lignes, on peut donc la supprimer.
+On peut aussi supprimer les 3 dernières variables pour simplifier le système, on obtient donc :
+
+$$ A = \left( \begin{matrix} 13 & 1 & 3 & 7 \\
+                            12 & 0 & 5 & 5\\ 
+                            9 & 1 & 7 & 8 \\ 
+                            9 & 2 & 6 & 5\\ 
+                            9 & 0 & 8 & 6\\ 
+                            10 & 0 & 7 & 1\\ 
+                            8 & 1 & 8 & 6\\ 
+                            6 & 3 & 8 & 7\\
+                            7 & 1 & 9 & 3\\
+                            7 & 0 & 10 & 5\\
+                            7 & 1 & 9 & 3\\
+                            6 & 0 & 11 & 4\\
+                            5 & 1 & 11 & 4\\
+                            5 & 1 & 11 & 3\end{matrix} \right) 
+; x = \left(\begin{matrix} x_1 \\ x_2 \\ x_3 \\x_4\end{matrix}\right)
+; b = \left(\begin{matrix} 62 \\
+53 \\
+46 \\
+45 \\
+42 \\
+41 \\
+40 \\
+37 \\
+33\\
+33\\
+33\\
+28\\
+26\\
+25\end{matrix}\right)$$
+
+On obtient sur Scilab la matrice suivante : 
+
+\begin{center}
+    \includegraphics[]{Capture1.PNG}
+\end{center}
+
+On peut donc conclure que pour calculer le nombre de points, il faut utilser la formule suivante : \\
+\begin{itemize}
+    \item 1 victoire : 4 points\\
+\item 1 nul : 2 points\\
+\item 1 défaite : 0 point\\
+\item 1 bonus : 1 point
+\end{itemize}
+
+
+
+\section{SVD et ACP}
+
+Dans cette partie on va considérer le relevé des caractéristique d'une population qui se fera dans une matrice $X$ d’ordre ($n × p$) dont chaque ligne représente un individu, parmi les n, décrit par les $p$ variables.
+À partir de la matrice $X \in \mathcal{M}_{np}$($\mathbb{R}$) définie plus haut, on construit une matrice $Y$ en centrant chacune
+des variables (colonnes) autour de sa moyenne. Ceci s’obtient en soustrayant de chaque colonne de X sa
+moyenne.
+On définit ensuite la matrice $M$ des variances covariances de $X$ de la manière suivante : $M = Y^tY$ ou $Y$
+désigne la transposée de $Y$
+\\
+D'après le théorème de la SVD :
+$\\$
+$$Y = U \Sigma V^T$$ 
+
+$V$ (orthogonal) a pour colonnes les vecteurs propres de $Y^tY\\\\$
+Or $Y^tY = M $ est symétrique d'ou  $$M = PDP^{-1}$$
+Avec $P^{-1} = P^t \Longrightarrow V = P\\\\$
+En outre, $D = \Sigma^2$ car $\Sigma = \left( \begin{matrix} D' & 0 \\
+                            0 & 0 \\\end{matrix} \right)\\\\$
+                            Avec $D'$ la matrice ayant comme termes diagonaux les valeurs singulières de la matrice $Y$.
+                            Les valeurs singulières sont les racines carrés des valeurs propres la matrice $Y^tY.\\\\$
+                            
+                            
+Comme $B = (e1,...,ep)$ est une base de $\mathbb{R}^p; \forall x \in \mathbb{R}^p\\$
+$\exists! (x_1,..., x_p) \in \mathbb{R}^p$ tel que $x = \Sigma x_ie_i $ L'existence est assurée car la famille est génératrice et l'unicité car $B$ est libre.
+
+Montrons que $x_i = <x/e_i>$
+
+Soit $i \in \llbracket 1,p \rrbracket$ $$ <x/e_i> = <e_i / \sum x_ke_k >$$     \begin{center}
+                                $= \sum <e_i/x_ke_k>= x_i$ car $(e_1,...,e_p)$ orthornormale\end{center}
+On a\\
+$$\\Y = \begin{pmatrix} y_{11} & ... & y_{1n}\\ \vdots & \ddots & \vdots\\  y_{n1} & ... & y_{nn}\end{pmatrix}$$ et $$P =  \begin{pmatrix} p_{11} & ... &p_{1n}\\ \vdots & \ddots & \vdots\\  p_{n1} & ... & p_{nn}\end{pmatrix}\\\\$$
+
+Soit $i$ la $i^{eme}$ ligne de $Y$ : $(y_{i1},...,y_{in})$ le $i^{eme}$ individu et $(p_{i1},...,p_{in})$ la  $i^{eme}$ colonne de $P$ une base de $\mathbb{R}^n\\\\$
+
+$$YP =\begin{pmatrix} y_{11} & ... & y_{1n}\\ \vdots & \ddots & \vdots\\  y_{n1} & ... & y_{nn}\end{pmatrix} \begin{pmatrix} p_{11} & ... &p_{1n}\\ \vdots & \ddots & \vdots\\  p_{n1} & ... & p_{nn}\end{pmatrix} \\ $$
+
+$$ = \begin{pmatrix} y_{11}p_{11}+...+y_{1n}p_{n1} & ... & y_{11}p_{1n}+...+y_{1n}p_{nn}\\
+\vdots & \ddots & \vdots\\
+y_{i1}p_{11}+...+y_{in}p_{n1} & ... & y_{i1}p_{1n}+...+y_{in}p_{nn}\end{pmatrix}
+$$
+\\\\
+Voici une application numérique de ces formules. 
+
+On considère cette matrice
+$$ X = \left( \begin{matrix} 8 & 9 & 12 & 10 & 11\\ 
+                             14 & 13 & 16 & 12 & 13 \\ 
+                             4 & 6 & 7 & 11 & 10  \\ 
+                             13 & 15 & 12 & 7 & 6 \\ 
+                             8 & 7 & 10 & 9 & 8  \\ 
+                             1 & 2 & 5 & 8 & 7 \\ 
+                             10 & 8 & 12 & 13 & 11  \\ 
+                             7 & 10 & 14 & 12 & 15 \\ 
+                             13 & 13 & 8 & 5 & 4 \\
+                             3 & 6 & 8 & 8 & 9 \end{matrix} \right) $$
+
+On centre cette matrice grâce à Scilab 
+\\
+On obtient \\\\    $M = Y'Y = $
+\begin{center}
+
+    \includegraphics[]{M.PNG}
+\end{center}
+\\
+\\
+Les résultats de la SVD de Y donnent :\\\\    $U  = $
+\begin{center}
+
+    \includegraphics[scale=0.6]{U.PNG}
+\end{center}\\\\
+    $S  = $
+\begin{center}
+
+    \includegraphics[]{S.PNG}
+\end{center}\\\\
+    $V  = $
+\begin{center}
+
+    \includegraphics[]{V.PNG}
+\end{center}
+
+On prend les deux premières colonnes de P (car ce sont les deux premiers vecteurs propres) on obtient \\\\$P2 = $
+\begin{center}
+    \includegraphics[]{P2.PNG}
+\end{center}
+
+puis en calculant $C = Y(P2)$ on obtient : \\\\
+    $C  = $
+\begin{center}
+    \includegraphics[]{C.PNG}
+\end{center}
+
+On peut maintenant tracer les individus sur un plan : 
+\begin{center}
+    \includegraphics[scale=0.5]{resultat_nuage_points.png}
+\end{center}
+
+\end{document}

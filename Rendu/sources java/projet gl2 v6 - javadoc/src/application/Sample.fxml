@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
+
+<BorderPane prefHeight="933.0" prefWidth="1659.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SampleController">
+   <top>
+   
+      <AnchorPane prefHeight="9.0" prefWidth="400" BorderPane.alignment="CENTER" />
+   </top>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <right>
+      <VBox alignment="CENTER" prefHeight="1001.0" prefWidth="460.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" contentDisplay="TOP" text="Liste des communes renseignées" underline="true">
+               <font>
+                  <Font name="System Bold Italic" size="21.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Label>
+            <HBox alignment="CENTER" prefHeight="32.0" prefWidth="449.0" spacing="30.0">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+               <children>
+                  <Button fx:id="boutton_selectionner" mnemonicParsing="false" onAction="#handleSelection" text="Selectionner">
+                     <font>
+                        <Font name="System Bold Italic" size="19.0" />
+                     </font>
+                  </Button>
+                  <Label text="Veuillez selectionner une commune">
+                     <font>
+                        <Font name="System Bold Italic" size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox prefHeight="362.0" prefWidth="408.0">
+               <children>
+                  <ListView fx:id="liste_communes" prefHeight="362.0" prefWidth="289.0" />
+                  <VBox alignment="CENTER" prefHeight="362.0" prefWidth="165.0" spacing="10.0">
+                     <children>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="142.0" text="Nombre de jours prevus" textAlignment="CENTER" />
+                        <TextField fx:id="nb_jours_prevus_confinement" prefHeight="18.0" prefWidth="34.0" promptText="0">
+                           <font>
+                              <Font size="8.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="60.0" right="60.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Button fx:id="boutton_confiner" alignment="CENTER" mnemonicParsing="false" onAction="#handle_confiner" text="Confiner" textFill="#ff0808">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="boutton_deconfiner" mnemonicParsing="false" onAction="#handle_deconfiner" text="Deconfiner" textFill="#289e2e">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="boutton_suppr_commune" mnemonicParsing="false" onAction="#handleSuppr" text="Supprimer Commune" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="55.0" prefWidth="392.0" spacing="20.0">
+               <children>
+                  <VBox alignment="CENTER" prefHeight="94.0" prefWidth="148.0" spacing="10.0" />
+                  <VBox alignment="CENTER" prefHeight="94.0" prefWidth="144.0" spacing="10.0" />
+               </children>
+            </HBox>
+            <Line endX="59.757354736328125" endY="-3.1076056957244873" startX="-106.53553771972656" startY="-3.106674909591675" />
+            <TableView fx:id="table_communes" prefHeight="436.0" prefWidth="460.0">
+              <columns>
+                <TableColumn fx:id="col_code_postal" prefWidth="89.6666259765625" text="Code postal" />
+                <TableColumn fx:id="col_statut" minWidth="0.0" prefWidth="112.3333740234375" text="Statut" />
+                  <TableColumn fx:id="col_nb_histo" prefWidth="127.3333740234375" text="Nombre d'historiques" />
+                  <TableColumn fx:id="col_nbLinks" prefWidth="136.6666259765625" text="Nombre de liens" />
+              </columns>
+               <VBox.margin>
+                  <Insets bottom="20.0" />
+               </VBox.margin>
+            </TableView>
+         </children>
+         <BorderPane.margin>
+            <Insets left="20.0" right="10.0" />
+         </BorderPane.margin>
+      </VBox>
+   </right>
+   <left>
+      <HBox prefHeight="979.0" prefWidth="1159.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="984.0" prefWidth="1134.0" spacing="10.0">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="319.0" prefWidth="1105.0" spacing="20.0">
+                     <children>
+                        <VBox alignment="CENTER" prefHeight="225.0" prefWidth="162.0" spacing="10.0">
+                           <children>
+                              <Label text="Ajouter une commune">
+                                 <font>
+                                    <Font name="System Bold Italic" size="13.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="input_ajout_commune_codepostal" promptText="Code postal" />
+                              <TextField fx:id="input_ajout_commune_dep" promptText="Departement" />
+                              <TextField fx:id="input_ajout_commune_region" promptText="Region" />
+                              <Button fx:id="boutton_ajout_commune" graphicTextGap="10.0" lineSpacing="10.0" mnemonicParsing="false" onAction="#handleAjoutCommune" text="Ajouter une commune">
+                                 <VBox.margin>
+                                    <Insets left="8.0" top="10.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="194.0" prefWidth="370.0" spacing="10.0">
+                           <children>
+                              <Label text="Saisir un historique">
+                                 <font>
+                                    <Font name="System Bold Italic" size="13.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Label>
+                              <TextField fx:id="cp_historique_input" promptText="Code postal" />
+                              <TextField fx:id="nbD" prefHeight="25.0" prefWidth="153.0" promptText="Nombre de deces" />
+                              <TextField fx:id="nbG" prefHeight="25.0" prefWidth="153.0" promptText="Nombre de guerisons" />
+                              <TextField fx:id="nbC" prefHeight="25.0" prefWidth="112.0" promptText="Nombre de contamination" />
+                              <HBox prefHeight="23.0" prefWidth="370.0" spacing="10.0">
+                                 <children>
+                                    <Label text="Date">
+                                       <font>
+                                          <Font name="System Bold Italic" size="13.0" />
+                                       </font>
+                                    </Label>
+                                    <DatePicker fx:id="dateHistorique" />
+                                 </children>
+                              </HBox>
+                              <Button mnemonicParsing="false" onAction="#saisir_historique" text="Saisir" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="290.0" prefWidth="135.0" spacing="10.0">
+                           <children>
+                              <Label alignment="BOTTOM_CENTER" text="Modifier Commune">
+                                 <font>
+                                    <Font name="System Bold Italic" size="13.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="input_ajout_commune_codepostal1" alignment="BOTTOM_CENTER" promptText="Nouveau code postal" />
+                              <TextField fx:id="input_ajout_commune_codepostal11" alignment="BOTTOM_CENTER" promptText="Nouveau departement" />
+                              <TextField fx:id="input_ajout_commune_codepostal111" alignment="BOTTOM_CENTER" promptText="Nouvelle region" />
+                              <Button fx:id="boutton_ajout_commune1" alignment="BOTTOM_CENTER" graphicTextGap="10.0" lineSpacing="10.0" mnemonicParsing="false" onAction="#handleAjoutCommune" text="Modifier commune" />
+                           </children>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="319.0" prefWidth="440.0" spacing="10.0">
+                           <children>
+                              <Label fx:id="detailscomulabel" text="Commune : ">
+                                 <font>
+                                    <Font name="System Bold Italic" size="23.0" />
+                                 </font>
+                              </Label>
+                              <Line endX="59.757354736328125" endY="-3.1076056957244873" startX="-106.53553771972656" startY="-3.106674909591675" />
+                              <Label fx:id="dpt" text="Departement :">
+                                 <font>
+                                    <Font name="System Bold Italic" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="regionlabel" text="Region :">
+                                 <font>
+                                    <Font name="System Bold Italic" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="nbclabel" layoutX="101.0" layoutY="129.0" text="Nombre de contamines sur les dernieres 24h :" textFill="#a49029">
+                                 <font>
+                                    <Font name="System Bold Italic" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="nbdlabel" layoutX="49.0" layoutY="142.0" text="Nombre de deces sur les dernieres 24h :" textFill="#ff0101">
+                                 <font>
+                                    <Font name="System Bold Italic" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="nbglabel" layoutX="64.0" layoutY="156.0" text="Nombre de guerisons sur les dernieres 24h :" textFill="#15b23f">
+                                 <font>
+                                    <Font name="System Bold Italic" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="statutlabel" layoutX="54.0" layoutY="169.0" text="Statut : ">
+                                 <font>
+                                    <Font name="System Bold Italic" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="nbhistolabel" layoutX="150.0" layoutY="183.0" text="Nombre d'historiques renseignés : ">
+                                 <font>
+                                    <Font name="System Bold Italic" size="13.0" />
+                                 </font>
+                              </Label>
+                              <Button mnemonicParsing="false" onAction="#handleSelection" text="Actualiser">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets right="30.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <Line endX="474.7573547363281" endY="-3.105743408203125" startX="-106.53553771972656" startY="-3.106674909591675">
+                     <VBox.margin>
+                        <Insets top="15.0" />
+                     </VBox.margin>
+                  </Line>
+                  <HBox alignment="TOP_CENTER" prefHeight="26.0" prefWidth="834.0" spacing="15.0">
+                     <children>
+                        <Label text="Veuillez selectionner une commune a droite avant d'utiliser les onglets">
+                           <font>
+                              <Font name="System Bold Italic" size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="dispCommuneSelectionnee" text="Selectionnez une commune !" underline="true">
+                           <font>
+                              <Font name="System Bold Italic" size="17.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <TabPane prefHeight="503.0" prefWidth="1124.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                      <Tab text="Historiques">
+                           <content>
+                              <Pane prefHeight="372.0" prefWidth="596.0">
+                                 <children>
+                                    <ListView fx:id="liste_historiques" layoutX="35.0" layoutY="78.0" prefHeight="354.0" prefWidth="375.0" />
+                                    <Label fx:id="historiqueDisp" layoutX="455.0" layoutY="38.0">
+                                       <font>
+                                          <Font name="System Bold Italic" size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <Button layoutX="475.0" layoutY="420.0" mnemonicParsing="false" onAction="#handleDetailsHistorique" prefHeight="41.0" prefWidth="102.0" text="Details">
+                                       <font>
+                                          <Font name="System Bold Italic" size="21.0" />
+                                       </font></Button>
+                                    <Label fx:id="detailsHisto" layoutX="472.0" layoutY="118.0" text="Historique #">
+                                       <font>
+                                          <Font name="System Bold Italic" size="23.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="detailsHDate" layoutX="484.0" layoutY="171.0" text="Date :">
+                                       <font>
+                                          <Font name="System Bold Italic" size="23.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="detailsHNbc" layoutX="482.0" layoutY="214.0" text="Nombre de contaminations :">
+                                       <font>
+                                          <Font name="System Bold Italic" size="23.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="detailsHNbd" layoutX="486.0" layoutY="250.0" text="Nombre de deces : " textFill="#ff0101">
+                                       <font>
+                                          <Font name="System Bold Italic" size="23.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="detailsHNbg" layoutX="486.0" layoutY="291.0" text="Nombre de guerisons : " textFill="#15b23f">
+                                       <font>
+                                          <Font name="System Bold Italic" size="23.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </Pane>
+                           </content>
+                        </Tab>
+                      <Tab text="Statistiques">
+                           <content>
+                              <Pane prefHeight="429.0" prefWidth="1124.0">
+                                 <children>
+                                    <PieChart fx:id="pieChart1" layoutX="675.0" layoutY="10.0" prefHeight="359.0" prefWidth="385.0" title="Repartition confinement communes" />
+                                    <Button layoutX="525.0" layoutY="408.0" mnemonicParsing="false" onAction="#handleGenererStats" prefHeight="20.0" prefWidth="75.0" text="Generer" />
+                                    <AreaChart fx:id="areaChart" layoutX="57.0" layoutY="3.0" prefHeight="377.0" prefWidth="465.0" title="Statistiques">
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </AreaChart>
+                                 </children>
+                              </Pane>
+                           </content></Tab>
+                        <Tab text="Lier des communes">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="356.0" prefWidth="551.0">
+                                 <children>
+                                    <Button fx:id="boutton_lier" layoutX="474.0" layoutY="298.0" mnemonicParsing="false" onAction="#handleLierCommune" prefHeight="73.0" prefWidth="128.0" text="Lier">
+                                       <font>
+                                          <Font name="System Bold" size="27.0" />
+                                       </font>
+                                    </Button>
+                                    <TextField fx:id="communeLierCommune" layoutX="329.0" layoutY="210.0" prefHeight="42.0" prefWidth="185.0" promptText="Commune">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font></TextField>
+                                    <TextField fx:id="distanceLierCommune" layoutX="587.0" layoutY="208.0" prefHeight="44.0" prefWidth="176.0" promptText="Distance en km">
+                                       <font>
+                                          <Font size="19.0" />
+                                       </font></TextField>
+                                    <Label fx:id="linkDisp" layoutX="370.0" layoutY="144.0" text="Selectionnez une commune">
+                                       <font>
+                                          <Font name="System Bold Italic" size="26.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="linkSuccess" layoutX="94.0" layoutY="399.0">
+                                       <font>
+                                          <Font name="System Bold Italic" size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="8.0" layoutY="37.0" text="Attention ! Pour des raisons d'optimisation lors des suppressions les liaisons, ne liez des communes que lorsque vous avez terminer les confinements/deconfinements">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="8.0" layoutY="58.0" text="Dans le cas contraire il faudra relancer l'application pour que l'algorithme fonctionne correctement">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab text="Distance entre commune">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <Pane layoutX="6.0" layoutY="5.0" prefHeight="472.0" prefWidth="1054.0">
+                                       <children>
+                                          <Label layoutX="364.0" layoutY="105.0" text="Trouver le chemin le plus cours entre 2 communes :">
+                                             <font>
+                                                <Font name="System Bold Italic" size="15.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="communeDepart" layoutX="202.0" layoutY="215.0" promptText="Code postal de depart" />
+                                          <TextField fx:id="communeArivee" layoutX="663.0" layoutY="203.0" promptText="Code postal d'arrivee" />
+                                          <Label layoutX="198.0" layoutY="164.0" text="Commune de départ">
+                                             <font>
+                                                <Font size="17.0" />
+                                             </font></Label>
+                                          <Label layoutX="668.0" layoutY="165.0" text="Commune d'arivée">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font></Label>
+                                          <Button fx:id="genererDijkstra" layoutX="473.0" layoutY="304.0" mnemonicParsing="false" onAction="#handleGenerer" prefHeight="50.0" prefWidth="118.0" text="Generer ">
+                                             <font>
+                                                <Font name="System Bold" size="19.0" />
+                                             </font>
+                                          </Button>
+                                          <Label fx:id="resultatDijkstra" layoutX="88.0" layoutY="401.0">
+                                             <font>
+                                                <Font size="31.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </Pane>
+                                    <Label layoutX="18.0" layoutY="47.0" text="Attention ! Pour des raisons d'optimisation lors des suppressions les liaisons, ne liez des communes que lorsque vous avez terminer les confinements/deconfinements">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label layoutX="18.0" layoutY="68.0" text="Dans le cas contraire il faudra relancer l'application pour que l'algorithme fonctionne correctement">
+                                       <font>
+                                          <Font name="System Italic" size="15.0" />
+                                       </font>
+                                    </Label>
+                                 </children></AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab text="Carte">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <WebView fx:id="webView" layoutX="4.0" layoutY="2.0" prefHeight="457.0" prefWidth="1125.0" />
+                                 </children></AnchorPane>
+                          </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" right="10.0" top="10.0" />
+               </padding>
+               <opaqueInsets>
+                  <Insets bottom="10.0" />
+               </opaqueInsets>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets left="10.0" />
+         </BorderPane.margin>
+         <padding>
+            <Insets right="25.0" />
+         </padding>
+      </HBox>
+   </left>
+   <center>
+      <HBox prefHeight="1025.0" prefWidth="117.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="1015.0" prefWidth="0.0" spacing="10.0">
+               <HBox.margin>
+                  <Insets bottom="10.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+   </center>
+</BorderPane>
